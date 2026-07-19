@@ -1,12 +1,9 @@
-
-name: Monthly Excel Issues → OneNote Update
+name: Monthly Excel Issues OneNote Update
 
 on:
   schedule:
-    # Runs at 08:00 UTC on the 1st of every month
     - cron: '0 8 1 * *'
   workflow_dispatch:
-    # Allows manual trigger from GitHub Actions tab anytime
 
 jobs:
   update-onenote:
@@ -23,25 +20,19 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run updater
         env:
-          TENANT_ID:        ${{ secrets.TENANT_ID }}
-          CLIENT_ID:        ${{ secrets.CLIENT_ID }}
-          REFRESH_TOKEN:    ${{ secrets.REFRESH_TOKEN }}
-          CLIENT_SECRET:    ${{ secrets.CLIENT_SECRET }}
+          TENANT_ID: ${{ secrets.TENANT_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           ONENOTE_NOTEBOOK: ${{ secrets.ONENOTE_NOTEBOOK }}
-          ONENOTE_SECTION:  ${{ secrets.ONENOTE_SECTION }}
-          ONENOTE_PAGE:     ${{ secrets.ONENOTE_PAGE }}
-        run: |
-          cd project
-          python main.py
+          ONENOTE_SECTION: ${{ secrets.ONENOTE_SECTION }}
+          ONENOTE_PAGE: ${{ secrets.ONENOTE_PAGE }}
+        run: python main.py
 
       - name: Notify on failure
         if: failure()
-        run: |
-          echo "❌ OneNote update failed on $(date)" 
-          echo "Check the Actions log for details."
+        run: echo "OneNote update failed on $(date)"
